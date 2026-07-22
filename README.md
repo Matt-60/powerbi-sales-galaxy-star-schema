@@ -15,7 +15,7 @@ Sales, marketing, and finance teams need one trustworthy source of truth for rev
 - **Dimensions:** `dim_customer`, `dim_product`, `dim_campaign`, `dim_geo`, `dim_order_flags` (junk), `dim_date`
 - **Facts:** `fact_sales`, `fact_inventory`, `fact_campaign_spend`, `fact_promotion_coverage` (factless), `fact_order_process` (accumulating snapshot), `fact_sales_targets`
 - **Support:** `security` table for RLS
-- Clean star schema — single-direction filters, no fact-to-fact relationships, all shared context routed through dimensions
+- **Clean galaxy star schema** — single-direction filters, no fact-to-fact relationships, all shared context routed through dimensions
 
 <img width="1134" height="616" alt="star schema" src="https://github.com/user-attachments/assets/c8d87768-b3b4-4e37-b41a-afebcf879de8" />
 
