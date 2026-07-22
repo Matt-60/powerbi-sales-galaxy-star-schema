@@ -1,21 +1,14 @@
 # Power BI Data Modeling — End-to-End Portfolio Project
 
-Transforming a chaotic, real-world-style "nightmare" dataset into a clean, trustworthy **star schema** in Power BI — following the same step-by-step process used on real client projects.
-
 ## 📌 Project Overview
 
 Most Power BI projects that suffer from bad performance or wrong numbers don't actually have a bad report — they have a **bad data model** underneath. This project simulates a messy dataset containing 23 raw tables full of typical real-world chaos: duplicate tables, mixed grains, many-to-many relationships, inconsistent naming, technical IDs, junk columns, and header/detail transactional structures.
 
 The goal: turn this mess into a healthy, well-documented **star schema** ready for reporting — with protected numbers, clear standards, and row-level security.
 
-## 🎯 Objectives
+## 🎯 Business Goal
 
-- Explore and understand a raw, undocumented dataset before making any changes
-- Design and build clean dimension and fact tables using Power Query
-- Apply a consistent modeling standard across the entire model
-- Protect key business numbers throughout every transformation
-- Implement Row-Level Security (RLS)
-- Deliver a final model that is easy to build reports on top of
+Sales, marketing, and finance teams need one trustworthy source of truth for revenue, orders, campaigns, and fulfillment — without duplicated numbers, broken totals, or slow reports. This project simulates a real inherited data model and rebuilds it so business users can safely answer questions like *"what were total sales by region and product last quarter"* or *"how long does it take from order to payment"* — with confidence the numbers won't silently break as the model grows.
 
 ## 🧭 Process / Phases
 
@@ -65,6 +58,9 @@ The goal: turn this mess into a healthy, well-documented **star schema** ready f
 - **Facts:** `fact_sales`, `fact_inventory`, `fact_campaign_spend`, `fact_promotion_coverage` (factless), `fact_order_process` (accumulating snapshot), `fact_sales_targets`
 - **Support:** `security` table for RLS
 - Clean star schema — single-direction filters, no fact-to-fact relationships, all shared context routed through dimensions
+
+  <img width="1134" height="616" alt="image" src="https://github.com/user-attachments/assets/c8d87768-b3b4-4e37-b41a-afebcf879de8" />
+
 
 ## 🛠️ Tools Used
 
