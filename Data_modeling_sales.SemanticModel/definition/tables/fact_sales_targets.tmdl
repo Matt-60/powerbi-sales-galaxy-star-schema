@@ -1,0 +1,41 @@
+table fact_sales_targets
+	lineageTag: 2857995e-c15e-46db-b6a1-8c121adcfd10
+
+	column date
+		isHidden
+		dataType: dateTime
+		formatString: dd.mm.yyyy
+		lineageTag: c9b36549-1a09-4901-a99f-aa71a1e1edf4
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column target_revenue
+		isHidden
+		dataType: int64
+		formatString: 0
+		lineageTag: a3b46499-8539-4ef1-ac55-af3484774b17
+		summarizeBy: none
+		sourceColumn: target_revenue
+
+		annotation SummarizationSetBy = User
+
+	partition fact_sales_targets = m
+		mode: import
+		queryGroup: 02_gold\facts
+		source =
+				let
+				    Source = sales_targets,
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"Period", "date"}, {"TargetRevenue", "target_revenue"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

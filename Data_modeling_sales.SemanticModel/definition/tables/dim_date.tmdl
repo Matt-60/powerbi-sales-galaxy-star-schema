@@ -1,0 +1,138 @@
+table dim_date
+	lineageTag: 34139ad9-86b2-413d-9067-833750c75c2d
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: Short Date
+		lineageTag: a0162dcc-a2c0-4565-a414-effb369be640
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		formatString: 0
+		lineageTag: 368f753c-d4de-4038-969f-eff87c3619ca
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [year]
+
+		annotation SummarizationSetBy = User
+
+	column quarter
+		formatString: 0
+		lineageTag: e297dbcf-da45-4d6b-b646-e29d4ab5c04f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [quarter]
+
+		annotation SummarizationSetBy = User
+
+	column quarter_label
+		sortByColumn: quarter
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [quarter_label]
+
+		annotation SummarizationSetBy = User
+
+	column month
+		formatString: 0
+		lineageTag: 038bcb5f-7ae5-43a4-9f8e-b354355cadeb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month]
+
+		annotation SummarizationSetBy = User
+
+	column month_name
+		sortByColumn: month
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month_name]
+
+		annotation SummarizationSetBy = User
+
+	column month_short
+		sortByColumn: month
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [month_short]
+
+		annotation SummarizationSetBy = User
+
+	column year_month
+		sortByColumn: year_month_number
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [year_month]
+
+		annotation SummarizationSetBy = User
+
+	column year_month_number
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [year_month_number]
+
+		annotation SummarizationSetBy = User
+
+	column day
+		formatString: 0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [day]
+
+		annotation SummarizationSetBy = User
+
+	column weekday_number
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [weekday_number]
+
+		annotation SummarizationSetBy = User
+
+	column day_name
+		sortByColumn: weekday_number
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [day_name]
+
+		annotation SummarizationSetBy = User
+
+	column is_weekend
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [is_weekend]
+
+		annotation SummarizationSetBy = User
+
+	partition dim_date = calculated
+		mode: import
+		source = ```
+				ADDCOLUMNS (
+				    CALENDARAUTO (),
+				    "year",              YEAR ( [Date] ),
+				    "quarter",           QUARTER ( [Date] ),
+				    "quarter_label",     "Q" & QUARTER ( [Date] ),
+				    "month",             MONTH ( [Date] ),
+				    "month_name",        FORMAT ( [Date], "MMMM", "en-US" ),
+				    "month_short",       FORMAT ( [Date], "MMM", "en-US" ),
+				    "year_month",        FORMAT ( [Date], "yyyy-MM", "en-US" ),
+				    "year_month_number", YEAR ( [Date] ) * 100 + MONTH ( [Date] ),
+				    "day",               DAY ( [Date] ),
+				    "weekday_number",    WEEKDAY ( [Date], 2 ),
+				    "day_name",          FORMAT ( [Date], "dddd", "en-US" ),
+				    "is_weekend",        WEEKDAY ( [Date], 2 ) >= 6
+				)
+				```
+
+	annotation PBI_Id = 0021001612954753b6182f582cbbd14b
+
