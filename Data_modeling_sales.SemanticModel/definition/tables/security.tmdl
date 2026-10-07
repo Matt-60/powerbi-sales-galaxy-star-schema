@@ -20,7 +20,7 @@ table security
 
 	partition security = m
 		mode: import
-		queryGroup: 01_bronze
+		queryGroup: 01_staging
 		source =
 				let
 				    Source = Excel.Workbook(File.Contents(SourceFile), null, true),

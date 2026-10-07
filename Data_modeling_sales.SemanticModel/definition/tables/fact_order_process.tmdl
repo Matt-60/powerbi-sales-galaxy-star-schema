@@ -94,7 +94,7 @@ table fact_order_process
 
 	partition fact_order_process = m
 		mode: import
-		queryGroup: 02_gold\facts
+		queryGroup: 02_model\facts
 		source =
 				let
 				    Source = orders,

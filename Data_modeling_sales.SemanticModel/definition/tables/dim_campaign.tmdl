@@ -64,7 +64,7 @@ table dim_campaign
 
 	partition dim_campaign = m
 		mode: import
-		queryGroup: 02_gold\dims
+		queryGroup: 02_model\dims
 		source =
 				let
 				    Source = CAMPAIGN_LOG,
@@ -78,5 +78,5 @@ table dim_campaign
 
 	annotation PBI_NavigationStepName = Navigation
 
-	annotation PBI_ResultType = Exception
+	annotation PBI_ResultType = Table
 

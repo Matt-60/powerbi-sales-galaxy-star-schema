@@ -45,12 +45,12 @@
                       "Entity": "_measure"
                     }
                   },
-                  "Property": "gross_margin_pct"
+                  "Property": "total_sales"
                 }
               },
-              "queryRef": "_measure.gross_margin_pct",
-              "nativeQueryRef": "gross_margin_pct",
-              "displayName": "gross_margin_pct"
+              "queryRef": "_measure.total_sales",
+              "nativeQueryRef": "total_sales",
+              "displayName": "total_sales"
             }
           ],
           "fieldParameters": [

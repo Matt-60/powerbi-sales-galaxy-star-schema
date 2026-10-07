@@ -97,7 +97,7 @@ table fact_sales
 		annotation PBI_FormatHint = {"isDateTimeCustom":true}
 
 	column product_key
-		dataType: double
+		dataType: int64
 		isHidden
 		formatString: 0
 		lineageTag: cfcae80e-64c4-4ac0-a2f5-893908cc4b82
@@ -138,7 +138,7 @@ table fact_sales
 
 	partition fact_sales = m
 		mode: import
-		queryGroup: 02_gold\facts
+		queryGroup: 02_model\facts
 		source =
 				let
 				    Source = order_line_items,
@@ -165,9 +165,10 @@ table fact_sales
 				    #"Renamed Columns1" = Table.RenameColumns(#"Reordered Columns3",{{"LineID", "line_id"}, {"OrderID", "order_id"}, {"dim_products.product_key", "product_key"}, {"dim_customer.customer_id", "customer_id"}, {"orders.OrderDate", "order_date"}, {"Quantity", "quantity"}, {"UnitPrice", "price"}, {"UnitCost", "cost"}, {"DiscountPct", "discount"}, {"LineTotal", "line_total"}, {"dim_order_flags.flag_key", "flag_key"}}),
 				    #"Reordered Columns5" = Table.ReorderColumns(#"Renamed Columns1",{"line_id", "order_id", "product_key", "customer_id", "ship_to_city_key", "bill_to_city_key", "flag_key", "order_date", "quantity", "price", "cost", "discount", "line_total"}),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Reordered Columns5",{{"order_date", type date}}),
-				    #"Unknown Product Key" = Table.ReplaceValue(#"Changed Type", null, -1, Replacer.ReplaceValue, {"product_key"})
+				    #"Unknown Product Key" = Table.ReplaceValue(#"Changed Type", null, -1, Replacer.ReplaceValue, {"product_key"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Unknown Product Key",{{"product_key", Int64.Type}})
 				in
-				    #"Unknown Product Key"
+				    #"Changed Type1"
 
 	annotation PBI_NavigationStepName = Navigation
 

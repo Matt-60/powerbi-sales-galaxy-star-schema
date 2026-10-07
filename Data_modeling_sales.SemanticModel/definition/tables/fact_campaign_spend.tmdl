@@ -58,7 +58,7 @@ table fact_campaign_spend
 
 	partition fact_campaign_spend = m
 		mode: import
-		queryGroup: 02_gold\facts
+		queryGroup: 02_model\facts
 		source =
 				let
 				    Source = CAMPAIGN_LOG,

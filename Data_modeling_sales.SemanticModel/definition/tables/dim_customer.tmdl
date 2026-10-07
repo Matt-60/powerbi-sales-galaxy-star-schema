@@ -106,7 +106,7 @@ table dim_customer
 
 	partition dim_customer = m
 		mode: import
-		queryGroup: 02_gold\dims
+		queryGroup: 02_model\dims
 		source =
 				let
 				    Source = CUST_MASTER,

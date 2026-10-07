@@ -72,7 +72,7 @@ table dim_product
 
 	partition dim_product = m
 		mode: import
-		queryGroup: 02_gold\dims
+		queryGroup: 02_model\dims
 		source =
 				let
 				    Source = products,

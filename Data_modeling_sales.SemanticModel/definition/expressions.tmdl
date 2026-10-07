@@ -13,7 +13,7 @@ expression Address =
 		in
 		    #"Changed Type"
 	lineageTag: 19bd9b78-b2c1-43ee-9859-b0202abcbd39
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -28,7 +28,7 @@ expression cities =
 		in
 		    #"Changed Type"
 	lineageTag: 36a5413a-d6a7-4364-a57e-ec05673f0093
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -43,7 +43,7 @@ expression CUST_MASTER =
 		in
 		    #"Changed Type"
 	lineageTag: 6c33367a-840b-42f6-bae5-81c6c00d8c9b
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -59,7 +59,7 @@ expression customer_contacts =
 		in
 		    #"Filtered Rows"
 	lineageTag: 03ce6831-a244-4979-9ba4-25d897763242
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -73,7 +73,7 @@ expression regions =
 		in
 		    #"Changed Type"
 	lineageTag: 76c90e8a-f7ce-40a6-bd7e-f4a43103759f
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -88,7 +88,7 @@ expression user_details =
 		in
 		    #"Changed Type"
 	lineageTag: 782d6cbe-43ea-45c3-9e55-5c03cc5129c9
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -104,7 +104,7 @@ expression products =
 		in
 		    #"Filtered Rows"
 	lineageTag: ee8d3016-234f-420d-9b63-a3e8362a387c
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -122,7 +122,7 @@ expression subcategories =
 		in
 		    #"Capitalized Each Word"
 	lineageTag: 005cb178-8fde-4bc1-ab85-d55f0bb5d2f5
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -137,7 +137,7 @@ expression CAMPAIGN_LOG =
 		in
 		    #"Changed Type"
 	lineageTag: f16c6299-73cd-4495-bc41-8a220576042f
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -154,7 +154,7 @@ expression campaign_skus =
 		in
 		    #"Trimmed Text"
 	lineageTag: 938774d0-f950-417e-9b9f-78bca84d08f2
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -169,7 +169,7 @@ expression exchange_rates =
 		in
 		    #"Changed Type"
 	lineageTag: 90b8e6b8-24b9-4714-9149-3c264d7b2038
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -184,7 +184,7 @@ expression inventory =
 		in
 		    #"Changed Type"
 	lineageTag: f71562c3-5cf2-4ce0-811d-8673f6b3b100
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -199,7 +199,7 @@ expression INVOICES =
 		in
 		    #"Changed Type"
 	lineageTag: b4b75195-b3c5-4c6c-95dd-0fd981847457
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -214,7 +214,7 @@ expression order_line_items =
 		in
 		    #"Changed Type"
 	lineageTag: 5ff2012e-0b10-41e0-ae28-7d0d84dba783
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -229,7 +229,7 @@ expression ORDERS_2025 =
 		in
 		    #"Changed Type"
 	lineageTag: dfab6e88-28a3-42f5-999d-16f0f5a0a572
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -244,7 +244,7 @@ expression ORDERS_2026 =
 		in
 		    #"Changed Type"
 	lineageTag: 5d9cf8e8-0e80-4d4a-9a4b-2aae0adc333e
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -267,7 +267,7 @@ expression payments =
 		in
 		    #"Grouped by Invoice"
 	lineageTag: 8685e5c0-52a4-4ac9-b0ac-81a5be1f71c9
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -282,7 +282,7 @@ expression sales_targets =
 		in
 		    #"Changed Type"
 	lineageTag: 23f93684-3cb3-457a-b060-b26f009f2023
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -304,7 +304,7 @@ expression shipments =
 		in
 		    #"Grouped by Order"
 	lineageTag: 9f16043c-d7be-4e00-a24c-d840d962283d
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -320,7 +320,7 @@ expression orders =
 		in
 		    #"Reordered Columns"
 	lineageTag: ccf1e524-b68a-4251-a32d-2687abe7d50c
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -333,7 +333,7 @@ expression channels =
 		in
 		    #"Changed Type"
 	lineageTag: 1bd1c4f4-d4e1-4e7e-9fa8-703f2a3ee48b
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -348,7 +348,7 @@ expression invoice_lines =
 		in
 		    #"Changed Type"
 	lineageTag: 4f7ced9c-15b8-407d-9b2c-7128ee099bdc
-	queryGroup: 01_bronze
+	queryGroup: 01_staging
 
 	annotation PBI_NavigationStepName = Navigation
 

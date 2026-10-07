@@ -29,7 +29,7 @@ table dim_geo
 
 	partition dim_geo = m
 		mode: import
-		queryGroup: 02_gold\dims
+		queryGroup: 02_model\dims
 		source =
 				let
 				    Source = cities,

@@ -10,19 +10,19 @@ queryGroup 00_parameters
 
 	annotation PBI_QueryGroupOrder = 2
 
-queryGroup 01_bronze
+queryGroup 01_staging
 
 	annotation PBI_QueryGroupOrder = 0
 
-queryGroup 02_gold
+queryGroup 02_model
 
 	annotation PBI_QueryGroupOrder = 1
 
-queryGroup 02_gold\dims
+queryGroup 02_model\dims
 
 	annotation PBI_QueryGroupOrder = 0
 
-queryGroup 02_gold\facts
+queryGroup 02_model\facts
 
 	annotation PBI_QueryGroupOrder = 1
 
