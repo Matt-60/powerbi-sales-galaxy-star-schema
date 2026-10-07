@@ -1,0 +1,77 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "ec745cbe52e7460b9585",
+  "position": {
+    "x": 0,
+    "y": 280.23335367844317,
+    "z": 1,
+    "height": 439.53613149564944,
+    "width": 1280.236192530979,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "areaChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "year_month"
+                }
+              },
+              "queryRef": "dim_date.year_month",
+              "nativeQueryRef": "year_month",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": []
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_measure"
+                    }
+                  },
+                  "Property": "total_sales"
+                }
+              },
+              "queryRef": "_measure.total_sales",
+              "nativeQueryRef": "total_sales",
+              "displayName": "total_sales"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Parameter"
+                    }
+                  },
+                  "Property": "Parameter"
+                }
+              },
+              "index": 0,
+              "length": 1
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

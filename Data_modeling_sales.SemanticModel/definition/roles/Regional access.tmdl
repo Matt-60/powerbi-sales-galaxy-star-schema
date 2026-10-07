@@ -1,0 +1,7 @@
+role 'Regional access'
+	modelPermission: read
+
+	tablePermission security = LOWER ( [user_email] ) = LOWER ( USERPRINCIPALNAME () )
+
+	annotation PBI_Id = 8569e5ca477742cbacc9a93bda0b29be
+

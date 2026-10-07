@@ -1,0 +1,44 @@
+table fact_promotion_coverage
+	lineageTag: 24a18501-7b0d-4b79-bacc-5be3973a803f
+
+	column campaign_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cfdb0847-731f-46b5-996c-f74e8950d48a
+		summarizeBy: none
+		sourceColumn: campaign_key
+
+		annotation SummarizationSetBy = User
+
+	column product_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2c95b2b2-c556-412f-90c7-c39504fba2ee
+		summarizeBy: none
+		sourceColumn: product_key
+
+		annotation SummarizationSetBy = User
+
+	partition fact_promotion_coverage = m
+		mode: import
+		queryGroup: 02_model\facts
+		source =
+				let
+				    Source = campaign_skus,
+				    #"Merged dim_campaign" = Table.NestedJoin(Source, {"CampaignName"}, dim_campaign, {"campaign_name"}, "dim_campaign", JoinKind.LeftOuter),
+				    #"Expanded dim_campaign" = Table.ExpandTableColumn(#"Merged dim_campaign", "dim_campaign", {"campaign_key"}, {"dim_campaign.campaign_key"}),
+				    #"Merged dim_product" = Table.NestedJoin(#"Expanded dim_campaign", {"PromotedSKUs"}, dim_product, {"product_code"}, "dim_product", JoinKind.LeftOuter),
+				    #"Expanded dim_product" = Table.ExpandTableColumn(#"Merged dim_product", "dim_product", {"product_key"}, {"dim_product.product_key"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded dim_product",{"CampaignName", "PromotedSKUs"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"dim_campaign.campaign_key", "campaign_key"}, {"dim_product.product_key", "product_key"}}),
+				    #"Unknown Product Key" = Table.ReplaceValue(#"Renamed Columns", null, -1, Replacer.ReplaceValue, {"product_key"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Unknown Product Key",{{"product_key", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
