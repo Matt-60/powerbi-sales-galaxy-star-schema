@@ -8,12 +8,14 @@ Most Power BI projects with slow reports or wrong numbers don't have a bad repor
 
 ## 🎯 Business Goal
 
+The dataset represents an international B2B distributor of electronics and apparel selling to retail chains and businesses on credit terms (Net 15–60), managed by account managers across 5 regions.
 Sales, marketing, finance and operations need one trustworthy model for revenue, targets, campaigns, stock and fulfillment — without duplicated numbers or broken totals. Questions the model answers:
 
 - *What were net sales and margin by region and product last quarter, and how do they compare to target?*
 - *Which promoted products didn't sell at all during the campaign?*
 - *What is our closing stock and sell-through by category?*
 - *How many days does it take from order to shipment and to payment?*
+
 
 ## 🏗️ Data Model
 
