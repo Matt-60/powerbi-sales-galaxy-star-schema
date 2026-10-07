@@ -1,2 +1,32 @@
 cultureInfo en-US
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "table_measure.marketing_spend_pct_of_sales": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_measure",
+			          "ConceptualProperty": "marketing_spend_pct_of_sales"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "marketing_spend_pct_of_sales": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

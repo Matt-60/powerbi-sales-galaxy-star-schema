@@ -23,11 +23,10 @@ expression cities =
 		let
 		    Source = Excel.Workbook(File.Contents(SourceFile), null, true),
 		    cities_Sheet = Source{[Item="cities",Kind="Sheet"]}[Data],
-		    #"Changed Type" = Table.TransformColumnTypes(cities_Sheet,{{"Column1", type text}, {"Column2", type text}}),
-		    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
-		    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"CityName", type text}, {"RegionName", type text}})
+		    #"Promoted Headers" = Table.PromoteHeaders(cities_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CityName", type text}, {"RegionName", type text}})
 		in
-		    #"Changed Type1"
+		    #"Changed Type"
 	lineageTag: 36a5413a-d6a7-4364-a57e-ec05673f0093
 	queryGroup: 01_bronze
 
@@ -117,10 +116,8 @@ expression subcategories =
 		    subcategories_Sheet = Source{[Item="subcategories",Kind="Sheet"]}[Data],
 		    #"Changed Type" = Table.TransformColumnTypes(subcategories_Sheet,{{"Column1", type text}}),
 		    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
-		    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"CategorySubcategory", type text}}),
-		    #"Split Column by Delimiter" = Table.SplitColumn(#"Changed Type1", "CategorySubcategory", Splitter.SplitTextByDelimiter("|", QuoteStyle.Csv), {"CategorySubcategory.1", "CategorySubcategory.2"}),
-		    #"Changed Type2" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"CategorySubcategory.1", type text}, {"CategorySubcategory.2", type text}}),
-		    #"Renamed Columns" = Table.RenameColumns(#"Changed Type2",{{"CategorySubcategory.1", "Category"}, {"CategorySubcategory.2", "Subcategory"}}),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Promoted Headers", "CategorySubcategory", Splitter.SplitTextByDelimiter("|", QuoteStyle.Csv), {"CategorySubcategory.1", "CategorySubcategory.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Split Column by Delimiter",{{"CategorySubcategory.1", "Category"}, {"CategorySubcategory.2", "Subcategory"}}),
 		    #"Capitalized Each Word" = Table.TransformColumns(#"Renamed Columns",{{"Category", Text.Proper, type text}, {"Subcategory", Text.Proper, type text}})
 		in
 		    #"Capitalized Each Word"
@@ -150,12 +147,10 @@ expression campaign_skus =
 		let
 		    Source = Excel.Workbook(File.Contents(SourceFile), null, true),
 		    campaign_skus_Sheet = Source{[Item="campaign_skus",Kind="Sheet"]}[Data],
-		    #"Changed Type" = Table.TransformColumnTypes(campaign_skus_Sheet,{{"Column1", type text}, {"Column2", type text}}),
-		    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
-		    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"CampaignName", type text}, {"PromotedSKUs", type text}}),
-		    #"Split Column by Delimiter" = Table.ExpandListColumn(Table.TransformColumns(#"Changed Type1", {{"PromotedSKUs", Splitter.SplitTextByDelimiter(",", QuoteStyle.Csv), let itemType = (type nullable text) meta [Serialized.Text = true] in type {itemType}}}), "PromotedSKUs"),
-		    #"Changed Type2" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"PromotedSKUs", type text}}),
-		    #"Trimmed Text" = Table.TransformColumns(#"Changed Type2",{{"PromotedSKUs", Text.Trim, type text}})
+		    #"Promoted Headers" = Table.PromoteHeaders(campaign_skus_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CampaignName", type text}, {"PromotedSKUs", type text}}),
+		    #"Split Column by Delimiter" = Table.ExpandListColumn(Table.TransformColumns(#"Changed Type", {{"PromotedSKUs", Splitter.SplitTextByDelimiter(",", QuoteStyle.Csv), let itemType = (type nullable text) meta [Serialized.Text = true] in type {itemType}}}), "PromotedSKUs"),
+		    #"Trimmed Text" = Table.TransformColumns(#"Split Column by Delimiter",{{"PromotedSKUs", Text.Trim, type text}})
 		in
 		    #"Trimmed Text"
 	lineageTag: 938774d0-f950-417e-9b9f-78bca84d08f2
@@ -184,11 +179,10 @@ expression inventory =
 		let
 		    Source = Excel.Workbook(File.Contents(SourceFile), null, true),
 		    inventory_Sheet = Source{[Item="inventory",Kind="Sheet"]}[Data],
-		    #"Changed Type" = Table.TransformColumnTypes(inventory_Sheet,{{"Column1", type text}, {"Column2", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}}),
-		    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
-		    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductName", type text}, {"2025-01", Int64.Type}, {"2025-02", Int64.Type}, {"2025-03", Int64.Type}, {"2025-04", Int64.Type}, {"2025-05", Int64.Type}, {"2025-06", Int64.Type}, {"2025-07", Int64.Type}, {"2025-08", Int64.Type}, {"2025-09", Int64.Type}, {"2025-10", Int64.Type}, {"2025-11", Int64.Type}, {"2025-12", Int64.Type}})
+		    #"Promoted Headers" = Table.PromoteHeaders(inventory_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductName", type text}, {"2025-01", Int64.Type}, {"2025-02", Int64.Type}, {"2025-03", Int64.Type}, {"2025-04", Int64.Type}, {"2025-05", Int64.Type}, {"2025-06", Int64.Type}, {"2025-07", Int64.Type}, {"2025-08", Int64.Type}, {"2025-09", Int64.Type}, {"2025-10", Int64.Type}, {"2025-11", Int64.Type}, {"2025-12", Int64.Type}})
 		in
-		    #"Changed Type1"
+		    #"Changed Type"
 	lineageTag: f71562c3-5cf2-4ce0-811d-8673f6b3b100
 	queryGroup: 01_bronze
 
@@ -262,11 +256,16 @@ expression payments =
 		    payments_Sheet = Source{[Item="payments",Kind="Sheet"]}[Data],
 		    #"Promoted Headers" = Table.PromoteHeaders(payments_Sheet, [PromoteAllScalars=true]),
 		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"PaymentID", type text}, {"InvoiceID", type text}, {"CustomerName", type text}, {"PayDate", type date}, {"Amount", type number}}),
-		    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"InvoiceID", Order.Ascending}}),
-		    #"Merged Queries" = Table.NestedJoin(#"Sorted Rows", {"Amount"}, INVOICES, {"Amount"}, "INVOICES", JoinKind.Inner),
-		    #"Removed Columns" = Table.RemoveColumns(#"Merged Queries",{"INVOICES"})
+		    // keep only the payment that settles the invoice in full (same invoice AND same amount)
+		    #"Matched Invoice" = Table.NestedJoin(#"Changed Type", {"InvoiceID", "Amount"}, INVOICES, {"InvoiceID", "Amount"}, "inv", JoinKind.Inner),
+		    #"Removed inv" = Table.RemoveColumns(#"Matched Invoice", {"inv"}),
+		    // guarantee 1 row per invoice even if the source ever contains two full payments
+		    #"Grouped by Invoice" = Table.Group(#"Removed inv", {"InvoiceID"}, {
+		        {"PayDate", each List.Min([PayDate]), type nullable date},
+		        {"Amount",  each List.First([Amount]), type number}
+		    })
 		in
-		    #"Removed Columns"
+		    #"Grouped by Invoice"
 	lineageTag: 8685e5c0-52a4-4ac9-b0ac-81a5be1f71c9
 	queryGroup: 01_bronze
 
@@ -295,10 +294,15 @@ expression shipments =
 		    shipments_Sheet = Source{[Item="shipments",Kind="Sheet"]}[Data],
 		    #"Promoted Headers" = Table.PromoteHeaders(shipments_Sheet, [PromoteAllScalars=true]),
 		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ShipmentID", type text}, {"OrderID", type text}, {"ShipMode", type text}, {"ShipDate", type date}, {"DeliveryDate", type date}}),
-		    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"OrderID", Order.Ascending}, {"ShipmentID", Order.Ascending}}),
-		    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows", {"OrderID"})
+		    #"Grouped by Order" = Table.Group(#"Changed Type", {"OrderID"}, {
+		        {"ShipMode",      each List.First(List.Sort([ShipMode])), type text},
+		        {"ShipDate",      each List.Min([ShipDate]), type nullable date},                         // first shipment leaves
+		        {"DeliveryDate",  each if List.Contains([DeliveryDate], null) then null
+		                               else List.Max([DeliveryDate]), type nullable date},                // order delivered when the LAST parcel arrives
+		        {"ShipmentCount", each Table.RowCount(_), Int64.Type}
+		    })
 		in
-		    #"Removed Duplicates"
+		    #"Grouped by Order"
 	lineageTag: 9f16043c-d7be-4e00-a24c-d840d962283d
 	queryGroup: 01_bronze
 
@@ -310,8 +314,8 @@ expression orders =
 		let
 		    Source = Table.Combine({ORDERS_2026, ORDERS_2025}),
 		    #"Removed Other Columns" = Table.SelectColumns(Source,{"OrderID", "CustomerName", "CustomerCity", "RegionName", "ShipToCity", "BillToCity", "OrderDate", "OrderChannel", "Status", "Priority", "OrderTotal"}),
-		    #"Merged Queries" = Table.NestedJoin(#"Removed Other Columns", {"OrderID"}, shipments, {"OrderID"}, "shipments", JoinKind.LeftOuter),
-		    #"Expanded shipments" = Table.ExpandTableColumn(#"Merged Queries", "shipments", {"ShipMode"}, {"shipments.ShipMode"}),
+		    #"Merged shipments" = Table.NestedJoin(#"Removed Other Columns", {"OrderID"}, shipments, {"OrderID"}, "shipments", JoinKind.LeftOuter),
+		    #"Expanded shipments" = Table.ExpandTableColumn(#"Merged shipments", "shipments", {"ShipMode"}, {"shipments.ShipMode"}),
 		    #"Reordered Columns" = Table.ReorderColumns(#"Expanded shipments",{"OrderID", "CustomerName", "CustomerCity", "RegionName", "ShipToCity", "BillToCity", "OrderDate", "OrderChannel", "Status", "Priority", "shipments.ShipMode", "OrderTotal"})
 		in
 		    #"Reordered Columns"

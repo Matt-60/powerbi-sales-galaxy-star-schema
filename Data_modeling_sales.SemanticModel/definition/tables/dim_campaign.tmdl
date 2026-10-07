@@ -2,8 +2,8 @@ table dim_campaign
 	lineageTag: 2011b8ae-5b7b-452a-b5d7-d09f4e1f90eb
 
 	column campaign_key
-		isHidden
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 6f802c12-9433-47b9-b42e-5456f12481a1
 		summarizeBy: none
@@ -78,5 +78,5 @@ table dim_campaign
 
 	annotation PBI_NavigationStepName = Navigation
 
-	annotation PBI_ResultType = Table
+	annotation PBI_ResultType = Exception
 

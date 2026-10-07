@@ -2,8 +2,8 @@ table dim_customer
 	lineageTag: e2415dc8-5e09-433c-a38f-31380f365829
 
 	column customer_id
-		isHidden
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 6d13dd03-b027-4e90-bbcb-25c9a0a54112
 		summarizeBy: none
@@ -53,8 +53,8 @@ table dim_customer
 		annotation SummarizationSetBy = User
 
 	column contact_email
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: 1a4a0b4b-0944-469f-85b3-b7ca13fc8683
 		summarizeBy: none
 		sourceColumn: contact_email
@@ -71,8 +71,8 @@ table dim_customer
 		annotation SummarizationSetBy = User
 
 	column phone
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: bb373b82-85a6-477d-949a-4e461826fceb
 		summarizeBy: none
 		sourceColumn: phone
@@ -111,14 +111,14 @@ table dim_customer
 				let
 				    Source = CUST_MASTER,
 				    #"Filtered Rows" = Table.SelectRows(Source, each ([CustomerID] <> 9999)),
-				    #"Merged Queries" = Table.NestedJoin(#"Filtered Rows", {"CustomerID"}, customer_contacts, {"CustomerID"}, "customer_contacts", JoinKind.LeftOuter),
-				    #"Expanded customer_contacts" = Table.ExpandTableColumn(#"Merged Queries", "customer_contacts", {"ContactName", "Email", "IsPrimary"}, {"customer_contacts.ContactName", "customer_contacts.Email", "customer_contacts.IsPrimary"}),
-				    #"Merged Queries1" = Table.NestedJoin(#"Expanded customer_contacts", {"CustomerID"}, user_details, {"UserID"}, "user_details", JoinKind.LeftOuter),
-				    #"Expanded user_details" = Table.ExpandTableColumn(#"Merged Queries1", "user_details", {"CreditLimit", "Phone"}, {"user_details.CreditLimit", "user_details.Phone"}),
-				    #"Merged Queries2" = Table.NestedJoin(#"Expanded user_details", {"AddressID"}, Address, {"AddressID"}, "Address", JoinKind.LeftOuter),
-				    #"Expanded Address" = Table.ExpandTableColumn(#"Merged Queries2", "Address", {"Street", "CityName"}, {"Address.Street", "Address.CityName"}),
-				    #"Merged Queries3" = Table.NestedJoin(#"Expanded Address", {"Address.CityName"}, cities, {"CityName"}, "cities", JoinKind.LeftOuter),
-				    #"Expanded cities" = Table.ExpandTableColumn(#"Merged Queries3", "cities", {"RegionName"}, {"cities.RegionName"}),
+				    #"Merged customer_contacts" = Table.NestedJoin(#"Filtered Rows", {"CustomerID"}, customer_contacts, {"CustomerID"}, "customer_contacts", JoinKind.LeftOuter),
+				    #"Expanded customer_contacts" = Table.ExpandTableColumn(#"Merged customer_contacts", "customer_contacts", {"ContactName", "Email", "IsPrimary"}, {"customer_contacts.ContactName", "customer_contacts.Email", "customer_contacts.IsPrimary"}),
+				    #"Merged user_details" = Table.NestedJoin(#"Expanded customer_contacts", {"CustomerID"}, user_details, {"UserID"}, "user_details", JoinKind.LeftOuter),
+				    #"Expanded user_details" = Table.ExpandTableColumn(#"Merged user_details", "user_details", {"CreditLimit", "Phone"}, {"user_details.CreditLimit", "user_details.Phone"}),
+				    #"Merged Address" = Table.NestedJoin(#"Expanded user_details", {"AddressID"}, Address, {"AddressID"}, "Address", JoinKind.LeftOuter),
+				    #"Expanded Address" = Table.ExpandTableColumn(#"Merged Address", "Address", {"Street", "CityName"}, {"Address.Street", "Address.CityName"}),
+				    #"Merged cities" = Table.NestedJoin(#"Expanded Address", {"Address.CityName"}, cities, {"CityName"}, "cities", JoinKind.LeftOuter),
+				    #"Expanded cities" = Table.ExpandTableColumn(#"Merged cities", "cities", {"RegionName"}, {"cities.RegionName"}),
 				    #"Removed Other Columns" = Table.SelectColumns(#"Expanded cities",{"CustomerID", "CustomerName", "Segment", "AccountManager", "PaymentTerms", "customer_contacts.ContactName", "customer_contacts.Email", "user_details.CreditLimit", "user_details.Phone", "Address.Street", "Address.CityName", "cities.RegionName"}),
 				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"CustomerID", "customer_id"}, {"CustomerName", "customer_name"}, {"Segment", "segment"}, {"AccountManager", "account_manager"}, {"PaymentTerms", "payment_terms"}, {"customer_contacts.ContactName", "contact_name"}, {"customer_contacts.Email", "contact_email"}, {"user_details.CreditLimit", "credit_limit"}, {"user_details.Phone", "phone"}, {"Address.Street", "street"}, {"Address.CityName", "city"}, {"cities.RegionName", "region"}})
 				in

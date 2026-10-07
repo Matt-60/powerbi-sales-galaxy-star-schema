@@ -25,10 +25,9 @@ table security
 				let
 				    Source = Excel.Workbook(File.Contents(SourceFile), null, true),
 				    security_Sheet = Source{[Item="security",Kind="Sheet"]}[Data],
-				    #"Changed Type" = Table.TransformColumnTypes(security_Sheet,{{"Column1", type text}, {"Column2", type text}}),
-				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
-				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"UserEmail", type text}, {"Region", type text}}),
-				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"UserEmail", "user_email"}, {"Region", "region"}})
+				    #"Promoted Headers" = Table.PromoteHeaders(security_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"UserEmail", type text}, {"Region", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"UserEmail", "user_email"}, {"Region", "region"}})
 				in
 				    #"Renamed Columns"
 

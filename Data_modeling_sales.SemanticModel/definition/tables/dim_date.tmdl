@@ -33,10 +33,11 @@ table dim_date
 		annotation SummarizationSetBy = User
 
 	column quarter_label
-		sortByColumn: quarter
+		lineageTag: 35f2c3a0-06bf-44f0-8ed0-eab0b609ce60
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [quarter_label]
+		sortByColumn: quarter
 
 		annotation SummarizationSetBy = User
 
@@ -50,32 +51,36 @@ table dim_date
 		annotation SummarizationSetBy = User
 
 	column month_name
-		sortByColumn: month
+		lineageTag: 723071aa-65a7-4c78-b366-ca9e4761bb00
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [month_name]
+		sortByColumn: month
 
 		annotation SummarizationSetBy = User
 
 	column month_short
-		sortByColumn: month
+		lineageTag: e5866ab8-1820-4eb7-b95d-cd3174efc0a3
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [month_short]
+		sortByColumn: month
 
 		annotation SummarizationSetBy = User
 
 	column year_month
-		sortByColumn: year_month_number
+		lineageTag: 166e13a9-c39a-4892-8a5f-70d846d1525e
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [year_month]
+		sortByColumn: year_month_number
 
 		annotation SummarizationSetBy = User
 
 	column year_month_number
 		isHidden
 		formatString: 0
+		lineageTag: 709b2ea7-bae8-4fed-bbe9-61750c28cfb4
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [year_month_number]
@@ -84,6 +89,7 @@ table dim_date
 
 	column day
 		formatString: 0
+		lineageTag: 55a960ba-e6ec-4939-9338-166af11793cd
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [day]
@@ -93,6 +99,7 @@ table dim_date
 	column weekday_number
 		isHidden
 		formatString: 0
+		lineageTag: 35b8a3a1-896d-4603-93ec-a8aca2aead95
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [weekday_number]
@@ -100,14 +107,16 @@ table dim_date
 		annotation SummarizationSetBy = User
 
 	column day_name
-		sortByColumn: weekday_number
+		lineageTag: 50936d78-3a0d-4a30-b2fd-6a631ea4d5b3
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [day_name]
+		sortByColumn: weekday_number
 
 		annotation SummarizationSetBy = User
 
 	column is_weekend
+		lineageTag: b2d10aac-65d2-453e-a056-f89459c3744e
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [is_weekend]
@@ -116,7 +125,7 @@ table dim_date
 
 	partition dim_date = calculated
 		mode: import
-		source = ```
+		source =
 				ADDCOLUMNS (
 				    CALENDARAUTO (),
 				    "year",              YEAR ( [Date] ),
@@ -132,7 +141,6 @@ table dim_date
 				    "day_name",          FORMAT ( [Date], "dddd", "en-US" ),
 				    "is_weekend",        WEEKDAY ( [Date], 2 ) >= 6
 				)
-				```
 
 	annotation PBI_Id = 0021001612954753b6182f582cbbd14b
 

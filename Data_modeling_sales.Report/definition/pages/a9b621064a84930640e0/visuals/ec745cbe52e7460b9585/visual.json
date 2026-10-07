@@ -1,16 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "ec745cbe52e7460b9585",
   "position": {
-    "x": 10,
-    "y": 290,
+    "x": 0,
+    "y": 280.23335367844317,
     "z": 1,
-    "height": 280,
-    "width": 280,
+    "height": 439.53613149564944,
+    "width": 1280.236192530979,
     "tabOrder": 1
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "areaChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,98 +20,58 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_campaign"
+                      "Entity": "dim_date"
                     }
                   },
-                  "Property": "end_date"
+                  "Property": "year_month"
                 }
               },
-              "queryRef": "dim_campaign.end_date",
-              "nativeQueryRef": "end_date",
+              "queryRef": "dim_date.year_month",
+              "nativeQueryRef": "year_month",
               "active": true
             }
           ]
+        },
+        "Series": {
+          "projections": []
         },
         "Y": {
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "fact_sales"
-                        }
-                      },
-                      "Property": "cost"
+                    "SourceRef": {
+                      "Entity": "_measure"
                     }
                   },
-                  "Function": 0
+                  "Property": "gross_margin_pct"
                 }
               },
-              "queryRef": "Sum(fact_sales.cost)",
-              "nativeQueryRef": "Sum of cost"
+              "queryRef": "_measure.gross_margin_pct",
+              "nativeQueryRef": "gross_margin_pct",
+              "displayName": "gross_margin_pct"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Parameter"
+                    }
+                  },
+                  "Property": "Parameter"
+                }
+              },
+              "index": 0,
+              "length": 1
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "dim_campaign"
-                  }
-                },
-                "Property": "end_date"
-              }
-            },
-            "direction": "Ascending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "dab2e71f741cc89e76ae",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "dim_campaign"
-              }
-            },
-            "Property": "end_date"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "946b2e55d16f79144751",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "fact_sales"
-                  }
-                },
-                "Property": "cost"
-              }
-            },
-            "Function": 0
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

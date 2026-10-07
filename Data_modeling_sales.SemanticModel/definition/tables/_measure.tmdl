@@ -1,112 +1,62 @@
 table _measure
 	lineageTag: 019adf09-caa4-4794-914a-8335496bc2b1
 
-	/// Gross sales = quantity x unit price, before discount (source LineTotal). Protected total.
-	measure total_sales = ```
-			SUM ( fact_sales[line_total] )
-			```
+	/// Gross sales = quantity x unit price, before discount (source LineTotal).
+	measure total_sales = SUM ( fact_sales[line_total] )
 		formatString: #,0.00
 		displayFolder: 01 Sales
 		lineageTag: 1697bfc8-1247-452c-a8ac-1964773f79ec
 
-	/// Discount granted on gross sales.
-	measure discount_amount = ```
-			SUMX ( fact_sales, fact_sales[line_total] * fact_sales[discount] )
-			```
+	/// Gross sales after line discount.
+	measure net_sales = SUMX ( fact_sales, fact_sales[line_total] * ( 1 - fact_sales[discount] ) )
 		formatString: #,0.00
 		displayFolder: 01 Sales
+		lineageTag: 7b129089-0553-4a42-9456-dd0a0aac3f62
 
-	/// Gross sales after discount.
-	measure net_sales = ```
-			[total_sales] - [discount_amount]
-			```
-		formatString: #,0.00
-		displayFolder: 01 Sales
-
-	measure discount_pct = ```
-			DIVIDE ( [discount_amount], [total_sales] )
-			```
-		formatString: 0.0%
-		displayFolder: 01 Sales
-
-	measure total_quantity = ```
-			SUM ( fact_sales[quantity] )
-			```
+	/// Units sold.
+	measure total_quantity = SUM ( fact_sales[quantity] )
 		formatString: #,0
 		displayFolder: 01 Sales
+		lineageTag: d7b6ff06-9e3e-4e7d-9241-00f1df656765
 
-	measure total_orders = ```
-			DISTINCTCOUNT ( fact_sales[order_id] )
-			```
+	/// Distinct orders with at least one order line.
+	measure total_orders = DISTINCTCOUNT ( fact_sales[order_id] )
 		formatString: #,0
 		displayFolder: 01 Sales
 		lineageTag: 89fe81d8-b6be-4ce2-a276-b643fcb126d6
 
 	/// Net sales per order.
-	measure avg_order_value = ```
-			DIVIDE ( [net_sales], [total_orders] )
-			```
+	measure avg_order_value = DIVIDE ( [net_sales], [total_orders] )
 		formatString: #,0.00
 		displayFolder: 01 Sales
+		lineageTag: dc202c8d-6958-4c35-97cb-5e49b2e1e973
 
 	/// Quantity x unit cost.
-	measure total_cost = ```
-			SUMX ( fact_sales, fact_sales[quantity] * fact_sales[cost] )
-			```
+	measure total_cost = SUMX ( fact_sales, fact_sales[quantity] * fact_sales[cost] )
 		formatString: #,0.00
 		displayFolder: 01 Sales
+		lineageTag: c2384b30-9b61-4934-9519-753c1cc6de67
 
-	/// Net sales minus cost.
-	measure gross_margin = ```
-			[net_sales] - [total_cost]
-			```
-		formatString: #,0.00
-		displayFolder: 01 Sales
-
-	measure gross_margin_pct = ```
-			DIVIDE ( [gross_margin], [net_sales] )
-			```
+	/// (Net sales - cost) / net sales.
+	measure gross_margin_pct = DIVIDE ( [net_sales] - [total_cost], [net_sales] )
 		formatString: 0.0%
 		displayFolder: 01 Sales
+		lineageTag: 0959d642-242d-403d-95e7-2f94743cd44a
 
 	/// Net sales by bill-to city (inactive role-playing relationship to dim_geo).
-	measure net_sales_bill_to = ```
-			CALCULATE ( [net_sales], USERELATIONSHIP ( fact_sales[bill_to_city_key], dim_geo[geo_key] ) )
-			```
+	measure net_sales_bill_to = CALCULATE ( [net_sales], USERELATIONSHIP ( fact_sales[bill_to_city_key], dim_geo[geo_key] ) )
 		formatString: #,0.00
 		displayFolder: 01 Sales
-
-	/// Data quality: gross sales on order lines whose product is missing from the product master.
-	measure sales_unknown_product = ```
-			CALCULATE ( [total_sales], dim_product[product_key] = -1 )
-			```
-		formatString: #,0.00
-		displayFolder: 01 Sales
+		lineageTag: 9aa4befd-ee11-4aa5-ac4c-c1b1b3a47e69
 
 	/// Customers with at least one order line in the current context.
-	measure total_active_customers = ```
-			DISTINCTCOUNT ( fact_sales[customer_id] )
-			```
+	measure total_active_customers = DISTINCTCOUNT ( fact_sales[customer_id] )
 		formatString: #,0
 		displayFolder: 02 Customers
 		lineageTag: c1bfbef4-f953-4850-bdb7-ceae7659bd2b
 
-	/// All customers in the customer master.
-	measure base_total_customers = ```
-			COUNTROWS ( dim_customer )
-			```
-		formatString: #,0
-		displayFolder: 02 Customers
-		lineageTag: a7730f33-ba5a-494d-bebf-6a1c97b9b1c4
-
-	measure customer_activation_pct = ```
-			DIVIDE ( [total_active_customers], [base_total_customers] )
-			```
-		formatString: 0.0%
-		displayFolder: 02 Customers
-
-	/// Company-level monthly target. Blank when a visual groups below month level, or when filtered by product, customer, geography, order flags or campaign - the target has no such breakdown.
-	measure target_revenue = ```
+	/// Company-level monthly target. Blank below month level or when filtered by product, customer, geography, order flags or campaign - the target has no such breakdown.
+	measure target_revenue =
 			VAR _belowMonth =
 			    ISINSCOPE ( dim_date[Date] ) || ISINSCOPE ( dim_date[day] )
 			        || ISINSCOPE ( dim_date[day_name] ) || ISINSCOPE ( dim_date[is_weekend] )
@@ -116,98 +66,42 @@ table _measure
 			        || ISCROSSFILTERED ( dim_campaign )
 			RETURN
 			    IF ( _belowMonth || _unsupportedDims, BLANK (), SUM ( fact_sales_targets[target_revenue] ) )
-			```
 		formatString: #,0
 		displayFolder: 03 Targets
+		lineageTag: f20795d6-495f-4ca0-8e88-6b41216d1683
 
-	/// Gross sales minus target.
-	measure sales_vs_target = ```
-			IF ( NOT ISBLANK ( [target_revenue] ), [total_sales] - [target_revenue] )
-			```
-		formatString: #,0
-		displayFolder: 03 Targets
-
-	measure target_attainment_pct = ```
-			DIVIDE ( [total_sales], [target_revenue] )
-			```
+	/// Gross sales / target.
+	measure target_attainment_pct = DIVIDE ( [total_sales], [target_revenue] )
 		formatString: 0.0%
 		displayFolder: 03 Targets
+		lineageTag: 2e97da18-817d-4df6-8828-7ae84bca7b24
 
-	measure campaign_spend = ```
-			SUM ( fact_campaign_spend[spend] )
-			```
+	/// Marketing spend from fact_campaign_spend.
+	measure campaign_spend = SUM ( fact_campaign_spend[spend] )
 		formatString: #,0.00
 		displayFolder: 04 Marketing
-
-	measure impressions = ```
-			SUM ( fact_campaign_spend[impressions] )
-			```
-		formatString: #,0
-		displayFolder: 04 Marketing
-
-	measure clicks = ```
-			SUM ( fact_campaign_spend[clicks] )
-			```
-		formatString: #,0
-		displayFolder: 04 Marketing
+		lineageTag: 31a4c383-3e25-4785-b8d3-1875e2fc59cb
 
 	/// Click-through rate = clicks / impressions.
-	measure ctr_pct = ```
-			DIVIDE ( [clicks], [impressions] )
-			```
+	measure ctr_pct = DIVIDE ( SUM ( fact_campaign_spend[clicks] ), SUM ( fact_campaign_spend[impressions] ) )
 		formatString: 0.00%
 		displayFolder: 04 Marketing
+		lineageTag: 010c96ba-3cce-413b-b714-503d27187795
 
-	/// Cost per click.
-	measure cpc = ```
-			DIVIDE ( [campaign_spend], [clicks] )
-			```
-		formatString: #,0.00
-		displayFolder: 04 Marketing
-
-	/// Cost per 1,000 impressions.
-	measure cpm = ```
-			DIVIDE ( [campaign_spend], [impressions] ) * 1000
-			```
-		formatString: #,0.00
-		displayFolder: 04 Marketing
-
-	/// Spend vs campaign budget (meaningful per campaign).
-	measure budget_utilization_pct = ```
-			DIVIDE ( [campaign_spend], SUM ( dim_campaign[budget] ) )
-			```
+	/// Campaign spend as a share of net sales in the same period (drill across two facts via dim_date).
+	measure marketing_spend_pct_of_sales = DIVIDE ( [campaign_spend], [net_sales] )
 		formatString: 0.0%
 		displayFolder: 04 Marketing
-
-	/// Campaign spend as a share of net sales in the same period.
-	measure marketing_spend_pct_of_sales = ```
-			DIVIDE ( [campaign_spend], [net_sales] )
-			```
-		formatString: 0.0%
-		displayFolder: 04 Marketing
-
-	/// Products covered by the selected campaign(s) - from the factless fact.
-	measure promoted_products = ```
-			DISTINCTCOUNT ( fact_promotion_coverage[product_key] )
-			```
-		formatString: #,0
-		displayFolder: 05 Promotions
+		lineageTag: 510b5746-ec74-40cc-a47e-fcc790774360
 
 	/// Net sales of products covered by the selected campaign(s); not limited to the campaign period.
-	measure promoted_product_sales = ```
-			CALCULATE ( [net_sales], KEEPFILTERS ( TREATAS ( VALUES ( fact_promotion_coverage[product_key] ), dim_product[product_key] ) ) )
-			```
+	measure promoted_product_sales = CALCULATE ( [net_sales], KEEPFILTERS ( TREATAS ( VALUES ( fact_promotion_coverage[product_key] ), dim_product[product_key] ) ) )
 		formatString: #,0.00
 		displayFolder: 05 Promotions
-
-	measure promoted_sales_share_pct = ```
-			DIVIDE ( [promoted_product_sales], [net_sales] )
-			```
-		formatString: 0.0%
-		displayFolder: 05 Promotions
+		lineageTag: e28c2b85-4e64-43d4-9b02-20efb37db00e
 
 	/// Promoted products with no sales in the current context - the classic factless-fact question.
-	measure promoted_products_without_sales = ```
+	measure promoted_products_without_sales =
 			COUNTROWS (
 			    FILTER (
 			        VALUES ( fact_promotion_coverage[product_key] ),
@@ -215,94 +109,41 @@ table _measure
 			        RETURN ISEMPTY ( CALCULATETABLE ( fact_sales, dim_product[product_key] = _product ) )
 			    )
 			)
-			```
 		formatString: #,0
 		displayFolder: 05 Promotions
+		lineageTag: ee7086d4-231b-4811-a239-f0270e8ff3e4
 
 	/// Closing stock: units at the last snapshot month in the period (semi-additive - not summed over time).
-	measure inventory_units = ```
+	measure inventory_units =
 			VAR _lastMonth = MAX ( fact_inventory[month] )
 			RETURN
 			    CALCULATE ( SUM ( fact_inventory[units] ), fact_inventory[month] = _lastMonth )
-			```
 		formatString: #,0
 		displayFolder: 06 Inventory
-
-	/// Average month-end stock over the months in the period.
-	measure avg_inventory_units = ```
-			AVERAGEX ( VALUES ( dim_date[year_month_number] ), CALCULATE ( SUM ( fact_inventory[units] ) ) )
-			```
-		formatString: #,0
-		displayFolder: 06 Inventory
+		lineageTag: 9b249639-f0d1-4d60-b3f2-f1564bcb9b74
 
 	/// Units sold / (units sold + closing stock).
-	measure sell_through_pct = ```
-			DIVIDE ( [total_quantity], [total_quantity] + [inventory_units] )
-			```
+	measure sell_through_pct = DIVIDE ( [total_quantity], [total_quantity] + [inventory_units] )
 		formatString: 0.0%
 		displayFolder: 06 Inventory
+		lineageTag: 355061a9-d74a-4e19-8d73-e55ecd54d375
 
-	/// Orders in the accumulating snapshot (by order date).
-	measure orders_in_process = ```
-			COUNTROWS ( fact_order_process )
-			```
-		formatString: #,0
-		displayFolder: 07 Fulfillment
-
-	/// Orders counted on their ship date (inactive role-playing date).
-	measure orders_shipped_by_ship_date = ```
-			CALCULATE (
-			    COUNTROWS ( fact_order_process ),
-			    USERELATIONSHIP ( fact_order_process[ship_date], dim_date[Date] ),
-			    NOT ISBLANK ( fact_order_process[ship_date] )
-			)
-			```
-		formatString: #,0
-		displayFolder: 07 Fulfillment
-
-	measure paid_orders_pct = ```
-			DIVIDE ( COUNTROWS ( FILTER ( fact_order_process, NOT ISBLANK ( fact_order_process[pay_date] ) ) ), [orders_in_process] )
-			```
-		formatString: 0.0%
-		displayFolder: 07 Fulfillment
-
-	/// Days from order to first shipment.
-	measure avg_order_to_ship = ```
+	/// Days from order to first shipment (accumulating snapshot).
+	measure avg_order_to_ship =
 			AVERAGEX (
 			    FILTER ( fact_order_process, NOT ISBLANK ( fact_order_process[ship_date] ) ),
 			    DATEDIFF ( fact_order_process[order_date], fact_order_process[ship_date], DAY )
 			)
-			```
 		formatString: 0.0
 		displayFolder: 07 Fulfillment
-
-	/// Days from shipment to delivery.
-	measure avg_ship_to_delivery = ```
-			AVERAGEX (
-			    FILTER ( fact_order_process, NOT ISBLANK ( fact_order_process[ship_date] ) && NOT ISBLANK ( fact_order_process[delivery_date] ) ),
-			    DATEDIFF ( fact_order_process[ship_date], fact_order_process[delivery_date], DAY )
-			)
-			```
-		formatString: 0.0
-		displayFolder: 07 Fulfillment
-
-	/// Days from invoice to payment.
-	measure avg_invoice_to_pay = ```
-			AVERAGEX (
-			    FILTER ( fact_order_process, NOT ISBLANK ( fact_order_process[invoice_date] ) && NOT ISBLANK ( fact_order_process[pay_date] ) ),
-			    DATEDIFF ( fact_order_process[invoice_date], fact_order_process[pay_date], DAY )
-			)
-			```
-		formatString: 0.0
-		displayFolder: 07 Fulfillment
+		lineageTag: c5324841-0f35-4e43-b2e1-c7f04e654cd3
 
 	/// Days from order to payment (paid orders only).
-	measure avg_order_to_pay = ```
+	measure avg_order_to_pay =
 			AVERAGEX (
 			    FILTER ( fact_order_process, NOT ISBLANK ( fact_order_process[pay_date] ) ),
 			    DATEDIFF ( fact_order_process[order_date], fact_order_process[pay_date], DAY )
 			)
-			```
 		formatString: 0.0
 		displayFolder: 07 Fulfillment
 		lineageTag: fbecf37a-6a74-4edd-9994-be20715dd6c4

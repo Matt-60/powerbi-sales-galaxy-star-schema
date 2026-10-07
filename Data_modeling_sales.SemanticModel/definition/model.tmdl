@@ -46,6 +46,7 @@ ref table fact_order_process
 ref table fact_sales_targets
 ref table dim_date
 ref table _measure
+ref table Parameter
 
 ref role 'Regional access'
 

@@ -2,8 +2,8 @@ table dim_geo
 	lineageTag: 7425999e-8bc2-4520-871a-847c5e2556be
 
 	column geo_key
-		isHidden
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: ece96f12-5931-4d11-86f0-c82afcb1a798
 		summarizeBy: none

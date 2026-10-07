@@ -2,8 +2,8 @@ table dim_product
 	lineageTag: b0ebd43a-bfe4-47bb-93af-256ebf30a9bc
 
 	column product_key
-		isHidden
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: a222c872-d5ba-45da-9b09-0de8fa44d65c
 		summarizeBy: none
@@ -76,14 +76,13 @@ table dim_product
 		source =
 				let
 				    Source = products,
-				    #"Merged Queries" = Table.NestedJoin(Source, {"SubcategoryName"}, subcategories, {"Subcategory"}, "products", JoinKind.LeftOuter),
-				    #"Expanded products" = Table.ExpandTableColumn(#"Merged Queries", "products", {"Category"}, {"products.Category"}),
-				    #"Added Index" = Table.AddIndexColumn(#"Expanded products", "Index", 1, 1, Int64.Type),
-				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "product_key"}}),
-				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"product_key", "ProductCode", "ProductName", "Brand", "SubcategoryName", "UnitPrice", "PrimarySupplier", "ProductDescription", "hash_key", "source_id", "products.Category"}),
-				    #"Removed Other Columns" = Table.SelectColumns(#"Reordered Columns",{"product_key", "ProductCode", "ProductName", "Brand", "SubcategoryName", "UnitPrice", "PrimarySupplier", "products.Category"}),
-				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Other Columns",{{"ProductCode", "product_code"}, {"ProductName", "product_name"}, {"Brand", "brand"}, {"SubcategoryName", "subcategory"}, {"products.Category", "category"}, {"UnitPrice", "price"}, {"PrimarySupplier", "supplier"}}),
-				    #"Added Unknown Product" = Table.InsertRows(#"Renamed Columns1", 0, {[product_key = -1, product_code = "UNKNOWN", product_name = "Unknown / retired product", brand = "Unknown", subcategory = "Unknown", price = null, supplier = "Unknown", category = "Unknown"]})
+				    #"Merged subcategories" = Table.NestedJoin(Source, {"SubcategoryName"}, subcategories, {"Subcategory"}, "products", JoinKind.LeftOuter),
+				    #"Expanded subcategories" = Table.ExpandTableColumn(#"Merged subcategories", "products", {"Category"}, {"products.Category"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Expanded subcategories", "Index", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"Index", "ProductCode", "ProductName", "Brand", "SubcategoryName", "UnitPrice", "PrimarySupplier", "ProductDescription", "hash_key", "source_id", "products.Category"}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Reordered Columns",{"Index", "ProductCode", "ProductName", "Brand", "SubcategoryName", "UnitPrice", "PrimarySupplier", "products.Category"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Index", "product_key"},{"ProductCode", "product_code"}, {"ProductName", "product_name"}, {"Brand", "brand"}, {"SubcategoryName", "subcategory"}, {"products.Category", "category"}, {"UnitPrice", "price"}, {"PrimarySupplier", "supplier"}}),
+				    #"Added Unknown Product" = Table.InsertRows(#"Renamed Columns", 0, {[product_key = -1, product_code = "UNKNOWN", product_name = "Unknown / retired product", brand = "Unknown", subcategory = "Unknown", price = null, supplier = "Unknown", category = "Unknown"]})
 				in
 				    #"Added Unknown Product"
 
